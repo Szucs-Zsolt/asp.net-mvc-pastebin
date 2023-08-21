@@ -3,7 +3,7 @@
     // Milyen role-ja lehet egy bejelentkezett felhasználónak
     public static class Role
     {
-        public static string Admin = "Admin";
-        public static string User = "User";
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }
