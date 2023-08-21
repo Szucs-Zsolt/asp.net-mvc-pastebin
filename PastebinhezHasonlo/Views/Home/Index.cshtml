@@ -1,8 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model Message
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form method="post">
+    <label asp-for="MessageId"></label>
+    <input asp-for="MessageId" class="form-control" placeholder="Kérjük másolja be ide az egyedi üzenetazonosítót..."/>
+    <span asp-validation-for="MessageId" class="text-danger"></span>
+
+    <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="Index">Üzenet lekérése</button>
+</form>
+
+<div>@Model.Msg</div>

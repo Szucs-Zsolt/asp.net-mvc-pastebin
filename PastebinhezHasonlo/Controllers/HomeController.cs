@@ -13,9 +13,10 @@ namespace PastebinhezHasonlo.Controllers
             _logger = logger;
         }
 
+        // GET
         public IActionResult Index()
         {
-            return View();
+            return View(new Message());    
         }
 
         public IActionResult Privacy()
