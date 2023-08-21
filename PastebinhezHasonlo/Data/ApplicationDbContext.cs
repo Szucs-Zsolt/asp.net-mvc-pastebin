@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PastebinhezHasonlo.Models;
 
+using Microsoft.AspNetCore.Identity;                    // KELL
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace PastebinhezHasonlo.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             :base(options)
@@ -23,7 +25,7 @@ namespace PastebinhezHasonlo.Data
             modelBuilder.Entity<Message>().HasData(
                 new Message() { Id = 1, MessageId = "1", Msg = "Példaüzenet." },
                 new Message() { Id = 2, MessageId = "2", Msg = "Második üzenet."}
-                );
+            );
         }
     }
 }
