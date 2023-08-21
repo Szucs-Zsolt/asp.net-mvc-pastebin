@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PastebinhezHasonlo.Data;
 using PastebinhezHasonlo.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace PastebinhezHasonlo.Controllers
 {
@@ -58,9 +59,25 @@ namespace PastebinhezHasonlo.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        // Akkor se fut le, ha a request localhost:12345/Home/WriteMessage-nek szól
         [Authorize(Roles = Role.User)]
         public IActionResult WriteMessage()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Role.User)]
+        public IActionResult WriteMessage(Message message)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(message);
+            }
+
+            message.MessageId = Guid.NewGuid().ToString();
+            message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View();
         }
     }

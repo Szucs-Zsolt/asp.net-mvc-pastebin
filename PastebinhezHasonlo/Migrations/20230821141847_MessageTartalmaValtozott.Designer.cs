@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PastebinhezHasonlo.Data;
 
@@ -11,9 +12,10 @@ using PastebinhezHasonlo.Data;
 namespace PastebinhezHasonlo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230821141847_MessageTartalmaValtozott")]
+    partial class MessageTartalmaValtozott
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,8 +245,8 @@ namespace PastebinhezHasonlo.Migrations
                         .HasMaxLength(8000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -257,7 +259,8 @@ namespace PastebinhezHasonlo.Migrations
                             DiscardDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscardFirstRead = false,
                             MessageId = "1",
-                            Msg = "Példaüzenet."
+                            Msg = "Példaüzenet.",
+                            UserId = 0
                         },
                         new
                         {
@@ -265,7 +268,8 @@ namespace PastebinhezHasonlo.Migrations
                             DiscardDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DiscardFirstRead = false,
                             MessageId = "2",
-                            Msg = "Második üzenet."
+                            Msg = "Második üzenet.",
+                            UserId = 0
                         });
                 });
 
