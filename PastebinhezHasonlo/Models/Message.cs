@@ -8,9 +8,9 @@ namespace PastebinhezHasonlo.Models
         [Key]
         public int Id { get; set; }
         
-        [Required(ErrorMessage="{0} megadása szükséges.")]
+        
         [Display(Name ="Üzenetazonosító")]
-        public string MessageId { get; set; }
+        public string? MessageId { get; set; }
 
         [Required(ErrorMessage = "{0} megadása szükséges.")]
         [MaxLength(8000, ErrorMessage = "{0} max. {1} karakter hosszú lehet.")]

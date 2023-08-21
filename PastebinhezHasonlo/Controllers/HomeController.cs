@@ -78,7 +78,9 @@ namespace PastebinhezHasonlo.Controllers
 
             message.MessageId = Guid.NewGuid().ToString();
             message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View();
+            _db.Messages.Add(message);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
