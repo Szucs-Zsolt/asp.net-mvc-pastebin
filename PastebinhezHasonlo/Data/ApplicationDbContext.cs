@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Identity;                    // KELL
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace PastebinhezHasonlo.Data
 {
+    
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            :base(options)
+            : base(options)
         {
-                
+        
         }
 
         // Táblák
