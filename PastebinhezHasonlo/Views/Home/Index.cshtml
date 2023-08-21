@@ -4,10 +4,10 @@
 @model Message
 
 <form method="post">
-    <label asp-for="MessageId"></label>
-    <input asp-for="MessageId" class="form-control" placeholder="Kérjük másolja be ide az egyedi üzenetazonosítót..."/>
-    <span asp-validation-for="MessageId" class="text-danger"></span>
-
+    <div class="row py-4">
+        <label asp-for="MessageId"></label>
+        <input asp-for="MessageId" class="form-control" placeholder="Kérjük másolja be ide az egyedi üzenetazonosítót..." />
+    </div>
     <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="Index">Üzenet lekérése</button>
 </form>
 
