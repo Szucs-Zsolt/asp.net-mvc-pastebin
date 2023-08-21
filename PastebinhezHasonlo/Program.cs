@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PastebinhezHasonlo.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity elérése
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+// Identity elérése (saját role-ok hozzáadásával)
+builder.Services
+        .AddIdentity<IdentityUser, IdentityRole>()      
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
+// Megerősítő emailt küldene ki. Ez nincs megoldva, csak a visszajelzés, hogy sikerült.
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 // Identity Razor page-t használ
 builder.Services.AddRazorPages();
 
