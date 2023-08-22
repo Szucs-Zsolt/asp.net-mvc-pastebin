@@ -76,23 +76,23 @@ namespace PastebinhezHasonlo.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = Role.User)]
-        public IActionResult CreateMessage(Message message)
+        public IActionResult CreateMessage(CreateMessageVM createMessageVM)
         {
             if (!ModelState.IsValid)
             {
-                return View(message);
+                return View(createMessageVM);
             }
             
             // Biztos, hogy az adatbázisban ne legyen ilyen MessageId-jű üzenet.
             do
             {
-                message.MessageId = Guid.NewGuid().ToString();
-            } while (_db.Messages.FirstOrDefault(x => x.MessageId == message.MessageId) != null);
+                createMessageVM.Message.MessageId = Guid.NewGuid().ToString();
+            } while (_db.Messages.FirstOrDefault(x => x.MessageId == createMessageVM.Message.MessageId) != null);
             
-            message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _db.Messages.Add(message);
+            createMessageVM.Message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _db.Messages.Add(createMessageVM.Message);
             _db.SaveChanges();
-            return RedirectToAction("ShowMessageId", new { messageId = message.MessageId });
+            return RedirectToAction("ShowMessageId", new { messageId = createMessageVM.Message.MessageId });
         }
 
         public IActionResult ShowMessageId(string messageId)
