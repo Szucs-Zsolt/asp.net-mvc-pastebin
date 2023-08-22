@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PastebinhezHasonlo.Data;
 using PastebinhezHasonlo.Models;
 using System.Diagnostics;
@@ -70,7 +71,19 @@ namespace PastebinhezHasonlo.Controllers
         [Authorize(Roles = Role.User)]
         public IActionResult CreateMessage()
         {
-            return View();
+            CreateMessageVM createMessageVM = new CreateMessageVM();
+            createMessageVM.Message = new Message();
+            createMessageVM.DiscardTimeList = new List<SelectListItem>();
+            foreach (var (key, value) in new DiscardTime().Names)
+            {
+                createMessageVM.DiscardTimeList.Add(new SelectListItem
+                {
+                    Value = key.ToString(),
+                    Text = value
+                });
+            }
+
+            return View(createMessageVM);
         }
 
         [HttpPost]
@@ -83,18 +96,51 @@ namespace PastebinhezHasonlo.Controllers
                 return View(createMessageVM);
             }
             
+            // Általunk beállított adatok:
             // Biztos, hogy az adatbázisban ne legyen ilyen MessageId-jű üzenet.
             do
             {
                 createMessageVM.Message.MessageId = Guid.NewGuid().ToString();
             } while (_db.Messages.FirstOrDefault(x => x.MessageId == createMessageVM.Message.MessageId) != null);
             
+            // Létrehozó felhasználó
             createMessageVM.Message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Mennyi idő után kell törölni
+            switch (createMessageVM.DiscardTime)
+            {
+                case (int)DiscardTime.Time.AfterRead:
+                    createMessageVM.Message.DiscardFirstRead = true;
+                    // Egy hónap után akkor is töröljük, ha nem olvasta el senki
+                    createMessageVM.Message.DiscardDate = DateTime.Now.AddMonths(1);
+                    break;
+                case (int)DiscardTime.Time.Hour1:
+                    createMessageVM.Message.DiscardDate = DateTime.Now.AddHours(1);
+                    break;
+                case (int)DiscardTime.Time.Hour4:
+                    createMessageVM.Message.DiscardDate = DateTime.Now.AddHours(4);
+                    break;
+                case (int)DiscardTime.Time.Hour8:
+                    createMessageVM.Message.DiscardDate = DateTime.Now.AddHours(8);
+                    break;
+                case (int)DiscardTime.Time.Day1:
+                    createMessageVM.Message.DiscardDate = DateTime.Now.AddDays(1);
+                    break;
+                case (int)DiscardTime.Time.Week1:
+                    createMessageVM.Message.DiscardDate = DateTime.Now.AddDays(7);
+                    break;
+                case (int)DiscardTime.Time.Month1:
+                    createMessageVM.Message.DiscardDate = DateTime.Now.AddMonths(1);
+                    break;
+            }
+
             _db.Messages.Add(createMessageVM.Message);
             _db.SaveChanges();
             return RedirectToAction("ShowMessageId", new { messageId = createMessageVM.Message.MessageId });
         }
 
+
+        [Authorize(Roles = Role.User)]
         public IActionResult ShowMessageId(string messageId)
         {
             ViewBag.MessageId = messageId;

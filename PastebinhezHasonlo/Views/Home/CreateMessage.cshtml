@@ -14,10 +14,18 @@
                 <textarea rows="10" asp-for="Message.Msg" class="form-control col-md-12"> </textarea>
                 <span asp-validation-for="Message.Msg" class="text-danger"></span>
             </div>
+@* Erre már nincs szükség, nem check-box-szal, hanem az ezután következő select-ben választjuk ki,
+   hogy mennyi ideig őrizzük meg az üzenetet. (Az action-ben állítjuk be az alapján ténylegesen.)
             <div class="form-group py-2">
                 <input asp-for="Message.DiscardFirstRead" class="form-check-input" />
                 <label asp-for="Message.DiscardFirstRead" class="form-check-label"></label>
             </div>
+*@
+            <div class="form-group py-2">
+                <label class="control-label">Törlés ennyi idő után:</label>
+                <select asp-for="@Model.DiscardTime" asp-items="@Model.DiscardTimeList" class="form-select"></select>
+            </div>
+
 
             <div class="form-group py-2">
                 <input type="submit" value="Üzenet tárolása" class="btn btn-primary" />
