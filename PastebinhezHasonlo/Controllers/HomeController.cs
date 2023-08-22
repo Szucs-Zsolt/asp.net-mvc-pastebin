@@ -75,8 +75,13 @@ namespace PastebinhezHasonlo.Controllers
             {
                 return View(message);
             }
-
-            message.MessageId = Guid.NewGuid().ToString();
+            
+            // Biztos, hogy az adatbázisban ne legyen ilyen MessageId-jű üzenet.
+            do
+            {
+                message.MessageId = Guid.NewGuid().ToString();
+            } while (_db.Messages.FirstOrDefault(x => x.MessageId == message.MessageId) != null);
+            
             message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _db.Messages.Add(message);
             _db.SaveChanges();
