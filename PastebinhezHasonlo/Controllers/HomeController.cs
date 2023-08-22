@@ -45,6 +45,13 @@ namespace PastebinhezHasonlo.Controllers
             {
                 result = new Message() { Msg = "Nincs ilyen azonosítójú üzenet."};
             }
+
+            // Ha első olvasáskor törlendő, még megjelenítés előtt töröljük
+            if (result.DiscardFirstRead)
+            {
+                _db.Messages.Remove(result);
+                _db.SaveChanges();
+            }
             return View(result);
         }
 
