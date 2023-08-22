@@ -23,6 +23,8 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 // Identity Razor page-t használ
 builder.Services.AddRazorPages();
 
+// Háttérfolyamat: rendszeresen törli a lejárt határidejű üzeneteket az adatbázisból
+builder.Services.AddHostedService<RepeatedDatabaseCleanup>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
