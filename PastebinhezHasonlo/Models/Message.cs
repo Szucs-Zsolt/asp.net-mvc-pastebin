@@ -21,6 +21,7 @@ namespace PastebinhezHasonlo.Models
         public string? UserId { get; set; }         // Ki írta az üzenetet
 
         [ValidateNever]
+        [Display(Name ="Első elolvasás után töröljük")]
         public bool DiscardFirstRead { get; set; }      // első olvasáskor töröljük?
 
         [ValidateNever]
