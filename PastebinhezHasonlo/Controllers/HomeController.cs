@@ -69,7 +69,7 @@ namespace PastebinhezHasonlo.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = Role.User)]
-        public IActionResult WriteMessage(Message message)
+        public IActionResult CreateMessage(Message message)
         {
             if (!ModelState.IsValid)
             {

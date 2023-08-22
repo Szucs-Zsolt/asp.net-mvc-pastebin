@@ -11,4 +11,6 @@
     <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="Index">Üzenet lekérése</button>
 </form>
 
-<div>@Model.Msg</div>
+<div class="row pt-4">
+    <textarea asp-for="Msg" rows="10" disabled class="form-control col-12"></textarea>
+</div>

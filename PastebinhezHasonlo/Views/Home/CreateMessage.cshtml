@@ -4,14 +4,14 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="WriteMessage">
+        <form method="post">
             <div asp-validation-summary="All"></div>
 
             <input asp-for="MessageId" hidden />
             
             <div class="form-group">
                 <label asp-for="Msg" class="control-label"></label>
-                <textarea rows="10" asp-for="Msg" class="form-control" > </textarea>
+                <textarea cols="80" rows="10" asp-for="Msg" class="form-control"> </textarea>
                 <span asp-validation-for="Msg" class="text-danger"></span>
             </div>
 
