@@ -59,9 +59,9 @@ namespace PastebinhezHasonlo.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        // Akkor se fut le, ha a request localhost:12345/Home/WriteMessage-nek szól
+        // Akkor se fut le, ha a request localhost:12345/Controller/Action-nek szól
         [Authorize(Roles = Role.User)]
-        public IActionResult WriteMessage()
+        public IActionResult CreateMessage()
         {
             return View();
         }
