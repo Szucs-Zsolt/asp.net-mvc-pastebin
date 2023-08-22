@@ -85,7 +85,13 @@ namespace PastebinhezHasonlo.Controllers
             message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _db.Messages.Add(message);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("ShowMessageId", new { messageId = message.MessageId });
+        }
+
+        public IActionResult ShowMessageId(string messageId)
+        {
+            ViewBag.MessageId = messageId;
+            return View();
         }
     }
 }
