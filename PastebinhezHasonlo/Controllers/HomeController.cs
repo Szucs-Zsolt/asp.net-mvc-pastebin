@@ -169,6 +169,7 @@ namespace PastebinhezHasonlo.Controllers
         // Bejelentkezett felhasználó megnézheti az általa létrehozott üzeneteket
         [Authorize(Roles = Role.User)]
         public IActionResult ShowMyMessages() {
+            // Saját üzenetei növekvő lejárati időrendben
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
             IEnumerable<Message> messageList =
                 _db.Messages
