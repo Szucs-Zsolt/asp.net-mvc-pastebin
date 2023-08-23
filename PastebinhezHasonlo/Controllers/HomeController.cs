@@ -169,16 +169,27 @@ namespace PastebinhezHasonlo.Controllers
         // Bejelentkezett felhasználó megnézheti az általa létrehozott üzeneteket
         [Authorize(Roles = Role.User)]
         public IActionResult ShowMyMessages() {
-            // Saját üzenetei növekvő lejárati időrendben
+            // Saját üzenetei növekvő lejáratiidő sorrendben
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
             IEnumerable<Message> messageList =
                 _db.Messages
                     .Where(x => x.UserId == currentUserId)
                     .OrderBy(x=> x.DiscardDate)
                     .ToList();
+
+            // Ha van benne olyan üzenet, amit már törölni kellett volna, de a háttérben
+            // futó időnkénti törlés még nem jutott el hozzá, akkor itt töröljük.
+            DateTime currentDateTime = DateTime.Now;
+            var discardMessages = messageList.Where(x => x.DiscardDate < currentDateTime);
+            if (discardMessages.Any())
+            {
+                _db.Messages.RemoveRange(discardMessages);
+                _db.SaveChanges();
+            }
+            
+         
             return View(messageList);
         }
-
 
         [Authorize(Roles = Role.User)]
         public IActionResult ModifyMessage(string messageId)
@@ -205,7 +216,7 @@ namespace PastebinhezHasonlo.Controllers
                 ViewBag.ErrorMessage = "Nincs jogosultsága más üzenetét szerkeszteni.";
                 return View("ShowErrorMessage");
             }
-            // --------------------------------------------------------------- 
+
             CreateMessageVM modifyMessageVM = new CreateMessageVM();
             modifyMessageVM.Message = message;
             modifyMessageVM.DiscardTimeList = new List<SelectListItem>();
@@ -238,9 +249,5 @@ namespace PastebinhezHasonlo.Controllers
             _db.SaveChanges();
             return RedirectToAction("ShowMessageId", new { messageId = modifyMessageVM.Message.MessageId });
         }
-
-
-
-
     }
 }
