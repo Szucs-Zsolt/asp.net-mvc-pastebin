@@ -27,9 +27,9 @@
                             <td>@shortMessageText</td>
                             <td>@message.DiscardDate.ToString()</td>
                             <td class="col-3 text-center">
-                                <a asp-controller="Home" asp-action="Modify" asp-route-messageId="@message.MessageId"
+                                <a asp-controller="Home" asp-action="ModifyMessage" asp-route-messageId="@message.MessageId"
                                 class="btn btn-primary">Szerkesztés</a>
-                                <a asp-controller="Home" asp-action="Delete" asp-route-messageId="@message.MessageId"
+                                <a asp-controller="Home" asp-action="DeleteMessage" asp-route-messageId="@message.MessageId"
                                    class="btn btn-danger">Törlés</a>
 
                                 

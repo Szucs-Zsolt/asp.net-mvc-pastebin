@@ -168,5 +168,35 @@ namespace PastebinhezHasonlo.Controllers
                     .ToList();
             return View(messageList);
         }
+
+
+        [Authorize(Roles = Role.User)]
+        public IActionResult ModifyMessage(string messageId)
+        {
+            // Hiba 1: Nincs üzenetazonosító
+            if (string.IsNullOrEmpty(messageId))
+            {
+                ViewBag.ErrorMessage = "Hiányzik az üzenetazonosító.";
+                return View("ShowErrorMessage");
+            }
+
+            // Hiba 2: Az adatbázisban nincs ilyen azonosítójú üzenet
+            Message? message = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);
+            if (message == null)
+            {
+                ViewBag.ErrorMessage = "Az adatbázisban nincs ilyen azonosítójú üzenet.";
+                return View("ShowErrorMessage");
+            }
+
+            // Hiba 3: Az üzenetet nem az aktuális user hozta létre
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
+            if (message.UserId != currentUserId)
+            {
+                ViewBag.ErrorMessage = "Nincs jogosultsága más üzenetét szerkeszteni.";
+                return View("ShowErrorMessage");
+            }
+            
+            return RedirectToAction("ShowMyMessages");
+        }
     }
 }
