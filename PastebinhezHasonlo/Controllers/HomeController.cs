@@ -148,12 +148,25 @@ namespace PastebinhezHasonlo.Controllers
             return RedirectToAction("ShowMessageId", new { messageId = createMessageVM.Message.MessageId });
         }
 
-
+        // Ha sikeresen létrehoztunk egy üzenetet, kiírja az azonosítóját,
+        // amivel majd le lehet kérdezni
         [Authorize(Roles = Role.User)]
         public IActionResult ShowMessageId(string messageId)
         {
             ViewBag.MessageId = messageId;
             return View();
+        }
+
+        // Bejelentkezett felhasználó megnézheti az általa létrehozott üzeneteket
+        [Authorize(Roles = Role.User)]
+        public IActionResult ShowMyMessages() {
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
+            IEnumerable<Message> messageList =
+                _db.Messages
+                    .Where(x => x.UserId == currentUserId)
+                    .OrderBy(x=> x.DiscardDate)
+                    .ToList();
+            return View(messageList);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PastebinhezHasonlo.Models;
 
-using Microsoft.AspNetCore.Identity;                    // KELL
+using Microsoft.AspNetCore.Identity;                    
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace PastebinhezHasonlo.Data
 {
