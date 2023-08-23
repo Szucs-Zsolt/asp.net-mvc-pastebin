@@ -249,5 +249,54 @@ namespace PastebinhezHasonlo.Controllers
             _db.SaveChanges();
             return RedirectToAction("ShowMessageId", new { messageId = modifyMessageVM.Message.MessageId });
         }
+
+
+        [Authorize(Roles = Role.User)]
+        public IActionResult DeleteMessage(string messageId)
+        {
+            // Hiba 1: Nincs üzenetazonosító
+            if (string.IsNullOrEmpty(messageId))
+            {
+                ViewBag.ErrorMessage = "Hiányzik az üzenetazonosító.";
+                return View("ShowErrorMessage");
+            }
+
+            // Hiba 2: Az adatbázisban nincs ilyen azonosítójú üzenet
+            Message? message = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);
+            if (message == null)
+            {
+                ViewBag.ErrorMessage = "Az adatbázisban nincs ilyen azonosítójú üzenet.";
+                return View("ShowErrorMessage");
+            }
+
+            // Hiba 3: Az üzenetet nem az aktuális user hozta létre
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
+            if (message.UserId != currentUserId)
+            {
+                ViewBag.ErrorMessage = "Nincs jogosultsága más üzenetét törölni.";
+                return View("ShowErrorMessage");
+            }
+            return View(message);
+        }
+
+        [HttpPost, ActionName("DeleteMessage")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Role.User)]
+        public IActionResult DeleteMessagePOST(string messageId)
+        {
+            Message message = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);
+            if (message != null)
+            {
+                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
+                if (message.UserId == currentUserId)
+                {
+                    _db.Messages.Remove(message);
+                    _db.SaveChanges();
+                }
+            }
+            return RedirectToAction("ShowMyMessages");
+        }
+
+
     }
 }
