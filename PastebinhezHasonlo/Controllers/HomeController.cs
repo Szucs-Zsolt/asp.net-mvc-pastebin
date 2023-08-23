@@ -35,6 +35,7 @@ namespace PastebinhezHasonlo.Controllers
         {
             var result = new Message();
 
+            // Hiba 1: Nincs azonosító, nem tudjuk melyik üzenetet kérdezzük le
             if (string.IsNullOrEmpty(messageId))
             {
                 result.Msg = "Hiányzik az üzenetazonosító.";
@@ -42,12 +43,20 @@ namespace PastebinhezHasonlo.Controllers
             }
 
             result = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);
+            // Hiba 2: Az adatbázisban nincs ilyen azonosítójú üzenet
             if (result == null)
             {
                 result = new Message() { Msg = "Nincs ilyen azonosítójú üzenet."};
+            } else if (result.DiscardDate < DateTime.Now)
+            {
+                // Hiba 3: Volt ilyen üzenet, de az érvényessége már lejárt
+                // (Az óránkénti adatbázistisztítás még nem törölte, ezért itt fogjuk).
+                _db.Messages.Remove(result);
+                _db.SaveChanges();
+                result = new Message() { Msg = "Nincs ilyen azonosítójú üzenet." };
             }
 
-            // Ha első olvasáskor törlendő, még megjelenítés előtt töröljük
+            // Speciális eset: Első olvasáskor törlendő
             if (result.DiscardFirstRead)
             {
                 _db.Messages.Remove(result);
