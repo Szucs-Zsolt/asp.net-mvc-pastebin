@@ -104,17 +104,26 @@ namespace PastebinhezHasonlo.Controllers
             {
                 return View(createMessageVM);
             }
-            
+
             // Általunk beállított adatok:
             // Biztos, hogy az adatbázisban ne legyen ilyen MessageId-jű üzenet.
             do
             {
                 createMessageVM.Message.MessageId = Guid.NewGuid().ToString();
             } while (_db.Messages.FirstOrDefault(x => x.MessageId == createMessageVM.Message.MessageId) != null);
-            
+
             // Létrehozó felhasználó
             createMessageVM.Message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            createMessageVM = SetMessageDiscardDate(createMessageVM);
+
+            _db.Messages.Add(createMessageVM.Message);
+            _db.SaveChanges();
+            return RedirectToAction("ShowMessageId", new { messageId = createMessageVM.Message.MessageId });
+        }
+
+        private static CreateMessageVM SetMessageDiscardDate(CreateMessageVM createMessageVM)
+        {
             // Mennyi idő után kell törölni
             switch (createMessageVM.DiscardTime)
             {
@@ -143,9 +152,7 @@ namespace PastebinhezHasonlo.Controllers
                     break;
             }
 
-            _db.Messages.Add(createMessageVM.Message);
-            _db.SaveChanges();
-            return RedirectToAction("ShowMessageId", new { messageId = createMessageVM.Message.MessageId });
+            return createMessageVM;
         }
 
         // Ha sikeresen létrehoztunk egy üzenetet, kiírja az azonosítóját,
@@ -195,8 +202,26 @@ namespace PastebinhezHasonlo.Controllers
                 ViewBag.ErrorMessage = "Nincs jogosultsága más üzenetét szerkeszteni.";
                 return View("ShowErrorMessage");
             }
-            
-            return RedirectToAction("ShowMyMessages");
+            // --------------------------------------------------------------- 
+            CreateMessageVM modifyMessageVM = new CreateMessageVM();
+            modifyMessageVM.Message = message;
+            modifyMessageVM.DiscardTimeList = new List<SelectListItem>();
+            foreach (var (key, value) in new DiscardTime().Names)
+            {
+                modifyMessageVM.DiscardTimeList.Add(new SelectListItem
+                {
+                    Value = key.ToString(),
+                    Text = value
+                });
+            }
+
+            return View(modifyMessageVM);
         }
+
+
+
+            
+            
+        
     }
 }
