@@ -8,6 +8,8 @@
             <div asp-validation-summary="All"></div>
 
             <input asp-for="Message.MessageId" hidden />
+            <input asp-for="Message.Id" hidden />
+            <input asp-for="Message.UserId" hidden />
                   
             <div class="form-group">
                 <label asp-for="Message.Msg" class="control-label"></label>
@@ -21,7 +23,7 @@
             </div>
 
             <div class="form-group py-2">
-                <input type="submit" value="Üzenet tárolása" class="btn btn-primary" />
+                <input type="submit" value="Üzenet módosítása" class="btn btn-primary" />
             </div>
         </form>
     </div>

@@ -115,44 +115,46 @@ namespace PastebinhezHasonlo.Controllers
             // Létrehozó felhasználó
             createMessageVM.Message.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            createMessageVM = SetMessageDiscardDate(createMessageVM);
+            // Message lejárati idejének beállítása (külön metódusba kiemelve)
+            createMessageVM.Message = 
+                SetMessageDiscardDate(createMessageVM.Message, createMessageVM.DiscardTime);
 
             _db.Messages.Add(createMessageVM.Message);
             _db.SaveChanges();
             return RedirectToAction("ShowMessageId", new { messageId = createMessageVM.Message.MessageId });
         }
 
-        private static CreateMessageVM SetMessageDiscardDate(CreateMessageVM createMessageVM)
+        private static Message SetMessageDiscardDate(Message message, int discardTime)
         {
             // Mennyi idő után kell törölni
-            switch (createMessageVM.DiscardTime)
+            switch (discardTime)
             {
                 case (int)DiscardTime.Time.AfterRead:
-                    createMessageVM.Message.DiscardFirstRead = true;
+                    message.DiscardFirstRead = true;
                     // Egy hónap után akkor is töröljük, ha nem olvasta el senki
-                    createMessageVM.Message.DiscardDate = DateTime.Now.AddMonths(1);
+                    message.DiscardDate = DateTime.Now.AddMonths(1);
                     break;
                 case (int)DiscardTime.Time.Hour1:
-                    createMessageVM.Message.DiscardDate = DateTime.Now.AddHours(1);
+                    message.DiscardDate = DateTime.Now.AddHours(1);
                     break;
                 case (int)DiscardTime.Time.Hour4:
-                    createMessageVM.Message.DiscardDate = DateTime.Now.AddHours(4);
+                    message.DiscardDate = DateTime.Now.AddHours(4);
                     break;
                 case (int)DiscardTime.Time.Hour8:
-                    createMessageVM.Message.DiscardDate = DateTime.Now.AddHours(8);
+                    message.DiscardDate = DateTime.Now.AddHours(8);
                     break;
                 case (int)DiscardTime.Time.Day1:
-                    createMessageVM.Message.DiscardDate = DateTime.Now.AddDays(1);
+                    message.DiscardDate = DateTime.Now.AddDays(1);
                     break;
                 case (int)DiscardTime.Time.Week1:
-                    createMessageVM.Message.DiscardDate = DateTime.Now.AddDays(7);
+                    message.DiscardDate = DateTime.Now.AddDays(7);
                     break;
                 case (int)DiscardTime.Time.Month1:
-                    createMessageVM.Message.DiscardDate = DateTime.Now.AddMonths(1);
+                    message.DiscardDate = DateTime.Now.AddMonths(1);
                     break;
             }
 
-            return createMessageVM;
+            return message;
         }
 
         // Ha sikeresen létrehoztunk egy üzenetet, kiírja az azonosítóját,
@@ -218,10 +220,26 @@ namespace PastebinhezHasonlo.Controllers
             return View(modifyMessageVM);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Role.User)]
+        public IActionResult ModifyMessage(CreateMessageVM modifyMessageVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(modifyMessageVM);
+            }
+            // Nem csak az üzenet tartalma és lejárati ideje is változhat.    
+            modifyMessageVM.Message = 
+                SetMessageDiscardDate(modifyMessageVM.Message, modifyMessageVM.DiscardTime);
+
+            _db.Messages.Update(modifyMessageVM.Message);
+            _db.SaveChanges();
+            return RedirectToAction("ShowMessageId", new { messageId = modifyMessageVM.Message.MessageId });
+        }
 
 
-            
-            
-        
+
+
     }
 }
