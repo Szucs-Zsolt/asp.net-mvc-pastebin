@@ -24,8 +24,14 @@ namespace PastebinhezHasonlo.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Message>().HasData(
-                new Message() { Id = 1, MessageId = "1", Msg = "Példaüzenet." },
-                new Message() { Id = 2, MessageId = "2", Msg = "Második üzenet."}
+                new Message()
+                {
+                    Id = 1,
+                    MessageId = "1",
+                    Msg = "Példaüzenet, hogy az adatbázis létrehozásakor már legyen benne valami.",
+                    DiscardFirstRead = false,
+                    DiscardDate = DateTime.Now.AddMonths(1)
+                }
             );
         }
     }
