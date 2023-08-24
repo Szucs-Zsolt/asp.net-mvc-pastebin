@@ -1,16 +1,26 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="hu" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="">
+    <meta name="author" content="Szücs Zsolt">
+
     <title>@ViewData["Title"] - PastebinhezHasonlo</title>
+<!-- Eredeti bootstrap CSS lecserélve. bootswatch.com, theme: lumen (dark) 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+-->
+
+    <link rel="stylesheet" href="~/css/bootswatch.lumen.bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PastebinhezHasonlo.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
+        <!-- Eredeti téma lecserélése lumen-re itt és a _LoginPartial.cshtml-ben is
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        -->
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3 bg-body-tertiary" data-bs-theme="dark">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Kezdőlap</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -26,13 +36,13 @@
                         <ul class="navbar-nav flex-grow-1">
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ShowMyMessages">Aktív üzeneteim</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="ShowMyMessages">Aktív üzeneteim</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateMessage">Üzenet írása</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="CreateMessage">Üzenet írása</a>
                             </li>
 
                         </ul>
