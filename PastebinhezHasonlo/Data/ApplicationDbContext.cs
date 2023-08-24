@@ -23,9 +23,6 @@ namespace PastebinhezHasonlo.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
-
-
             modelBuilder.Entity<Message>().HasData(
                 new Message()
                 {

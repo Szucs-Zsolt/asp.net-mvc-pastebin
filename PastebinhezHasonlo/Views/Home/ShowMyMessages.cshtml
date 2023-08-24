@@ -28,7 +28,7 @@
                     
                     @{
                         string discardDateMsg = message.DiscardDate.ToString();
-                        discardDateMsg += message.DiscardFirstRead ? "\n(csak egyszer)" : "";
+                        discardDateMsg += message.DiscardFirstRead ? "<br />(csak egyszer)" : "";
                     }
                     <td>@discardDateMsg.ToString()</td>
                     
