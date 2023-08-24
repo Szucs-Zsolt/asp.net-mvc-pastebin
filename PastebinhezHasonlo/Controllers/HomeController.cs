@@ -124,6 +124,7 @@ namespace PastebinhezHasonlo.Controllers
             return RedirectToAction("ShowMessageId", new { messageId = createMessageVM.Message.MessageId });
         }
 
+        // Az üzenetben beállítjuk az időt, amikor majd törölni kell (discardTime alapján)
         private static Message SetMessageDiscardDate(Message message, int discardTime)
         {
             // Mennyi idő után kell törölni
@@ -187,7 +188,6 @@ namespace PastebinhezHasonlo.Controllers
                 _db.SaveChanges();
             }
             
-         
             return View(messageList);
         }
 
@@ -296,7 +296,5 @@ namespace PastebinhezHasonlo.Controllers
             }
             return RedirectToAction("ShowMyMessages");
         }
-
-
     }
 }

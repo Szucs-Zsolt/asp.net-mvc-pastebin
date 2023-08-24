@@ -10,7 +10,9 @@
                 <th class="col-2">Azonosító</th>
                 <th class="col-4">Üzenet eleje</th>
                 <th class="col-3">Lejárati idő</th>
-                <th class="col-3"></th>
+                <th class="col-3 text-center">
+                    <a asp-controller="Home" asp-action="CreateMessage" class="btn btn-success">Üzenet írása</a>
+                    </th>
             </tr>
         </thead>
         <tbody>
@@ -23,7 +25,13 @@
                         message.Msg.Substring(0, 58) + ".." : message.Msg;
                     }
                     <td>@shortMessageText</td>
-                    <td>@message.DiscardDate.ToString()</td>
+                    
+                    @{
+                        string discardDateMsg = message.DiscardDate.ToString();
+                        discardDateMsg += message.DiscardFirstRead ? "\n(csak egyszer)" : "";
+                    }
+                    <td>@discardDateMsg.ToString()</td>
+                    
                     <td class="col-3 text-center">
                         <a asp-controller="Home" asp-action="ModifyMessage" asp-route-messageId="@message.MessageId"
                            class="btn btn-sm btn-primary">Szerkesztés</a>
@@ -32,6 +40,10 @@
                     </td>
                 </tr>
             }
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-center text-info">@Model.Count() db üzenet</td>
         </tbody>
     </table>
 </div>
