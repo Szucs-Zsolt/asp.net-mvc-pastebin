@@ -284,7 +284,7 @@ namespace PastebinhezHasonlo.Controllers
         [Authorize(Roles = Role.User)]
         public IActionResult DeleteMessagePOST(string messageId)
         {
-            Message message = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);
+            Message? message = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);                               
             if (message != null)
             {
                 string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();

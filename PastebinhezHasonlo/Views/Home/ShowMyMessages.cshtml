@@ -1,42 +1,40 @@
 ﻿@model IEnumerable<Message>
 <div class="row">
-    <div class="card">
-        <div class="card-head">
-            <h3 class="col-12 text-center">Jelenleg aktív üzenetek</h3>
-        </div>
-
-        <div class="card-body">
-            <table class="table table-bordered table-striped col-12">
-                <thead>
-                    <tr>
-                        <th class="col-2">Azonosító</th>
-                        <th class="col-4">Üzenet eleje</th>
-                        <th class="col-3">Lejárati idő</th>
-                        <th class="col-3"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var message in Model)
-                    {
-                        <tr>
-                            <td>@message.MessageId</td>
-                            @{
-                                string shortMessageText = message.Msg.Length > 60 ?
-                                message.Msg.Substring(0, 58) + ".." : message.Msg;
-                            }
-                            <td>@shortMessageText</td>
-                            <td>@message.DiscardDate.ToString()</td>
-                            <td class="col-3 text-center">
-                                <a asp-controller="Home" asp-action="ModifyMessage" asp-route-messageId="@message.MessageId"
-                                class="btn btn-primary">Szerkesztés</a>
-                                <a asp-controller="Home" asp-action="DeleteMessage" asp-route-messageId="@message.MessageId"
-                                   class="btn btn-danger">Törlés</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    <div class="mb-2">
+        <h3 class="col-12 text-center">Jelenleg aktív üzenetek</h3>
     </div>
+
+    <table class="table table-bordered table-striped col-12">
+        <thead>
+            <tr>
+                <th class="col-2">Azonosító</th>
+                <th class="col-4">Üzenet eleje</th>
+                <th class="col-3">Lejárati idő</th>
+                <th class="col-3"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var message in Model)
+            {
+                <tr>
+                    <td>@message.MessageId</td>
+                    @{
+                        string shortMessageText = message.Msg.Length > 60 ?
+                        message.Msg.Substring(0, 58) + ".." : message.Msg;
+                    }
+                    <td>@shortMessageText</td>
+                    <td>@message.DiscardDate.ToString()</td>
+                    <td class="col-3 text-center">
+                        <a asp-controller="Home" asp-action="ModifyMessage" asp-route-messageId="@message.MessageId"
+                           class="btn btn-sm btn-primary">Szerkesztés</a>
+                        <a asp-controller="Home" asp-action="DeleteMessage" asp-route-messageId="@message.MessageId"
+                           class="btn btn-sm btn-danger">Törlés</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
+
 
