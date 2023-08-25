@@ -11,7 +11,9 @@
                 <th class="col-3">Név</th>
                 <th class="col-3">Email</th>
                 <th class="col-3">Típus</th>
-                <th class="col-3"></th>
+                <th class="col-1">Üzenetei</th>
+                <th class="col-1">Admin jog</th>
+                <th class="col-1">Törlés</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +24,25 @@
                     <td>@userRole.Name</td>
                     <td>@userRole.Email</td>
                     <td>@userRole.Role</td>
-                    <td></td>
+                    <td>
+                        <a asp-controller="Home" asp-action="ShowUserMessages" asp-route-email="@userRole.Email"
+                        class="btn btn-sm btn-primary">Üzenetei</a>
+                    </td>
+                    <td>
+                        @if (userRole.Role == Role.Admin)
+                        {
+                            <a asp-controller="Home" asp-action="RemoveAdminRole" asp-route-email="@userRole.Email"
+                            class="btn btn-sm btn-warning">Admin jog elvétele</a>
+                        } else
+                        {
+                            <a asp-controller="Home" asp-action="AddAdminRole" asp-route-email="@userRole.Email"
+                               class="btn btn-sm btn-outline-warning">Admin jog megadása</a>
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Home" asp-action="DeleteUser" asp-route-email="@userRole.Email"
+                        class="btn btn-sm btn-danger">Felhasználó törlése</a>
+                    </td>
                 </tr>
             }
 
