@@ -1,0 +1,32 @@
+﻿@model List<UserRoleVM>
+
+<div class="row">
+    <div class="mb-2">
+        <h3 class="col-12 text-center">Felhasználók listája</h3>
+    </div>
+
+    <table class="table table-bordered table-striped col-12">
+        <thead>
+            <tr>
+                <th class="col-3">Név</th>
+                <th class="col-3">Email</th>
+                <th class="col-3">Típus</th>
+                <th class="col-3"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var userRole in Model)
+            {
+                <tr>
+                    <td>@userRole.Name</td>
+                    <td>@userRole.Email</td>
+                    <td>@userRole.Role</td>
+                    <td></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+

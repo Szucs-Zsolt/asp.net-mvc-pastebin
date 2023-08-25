@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
+using PastebinhezHasonlo.Data;
+
 namespace PastebinhezHasonlo.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel

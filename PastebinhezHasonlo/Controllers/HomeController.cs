@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using PastebinhezHasonlo.Data;
 using PastebinhezHasonlo.Models;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace PastebinhezHasonlo.Controllers
 {
@@ -13,14 +16,16 @@ namespace PastebinhezHasonlo.Controllers
         private readonly ILogger<HomeController> _logger;
         // Dependency injection: EntityFramework
         private readonly ApplicationDbContext _db;
-
+        private readonly UserManager<IdentityUser> _userManager;
 
         public HomeController(
             ILogger<HomeController> logger,
-            ApplicationDbContext db)
+            ApplicationDbContext db,
+            UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _db = db;
+            _userManager = userManager;
         }
 
         // GET
@@ -296,5 +301,29 @@ namespace PastebinhezHasonlo.Controllers
             }
             return RedirectToAction("ShowMyMessages");
         }
-    }
-}
+
+        public async Task<IActionResult> ShowAllUsers()
+        {
+            List<UserRoleVM> userRoleVMList = new List<UserRoleVM>();
+
+            var users = await _userManager.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                UserRoleVM userRoleVM = new UserRoleVM();
+                userRoleVM.Name = user.UserName;
+                userRoleVM.Email = user.Email;
+                var roles = await _userManager.GetRolesAsync(user);
+                userRoleVM.Role = roles.First();
+
+                userRoleVMList.Add(userRoleVM);
+            }
+
+            userRoleVMList = userRoleVMList
+                .OrderBy(x=> x.Role)
+                .ThenBy(x=> x.Name)
+                .ToList();
+
+            return View(userRoleVMList);
+        }
+    } // class HomeController
+} // namespace
