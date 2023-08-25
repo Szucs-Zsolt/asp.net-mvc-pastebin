@@ -235,7 +235,6 @@ namespace PastebinhezHasonlo.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("MessageId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Msg")
@@ -254,18 +253,10 @@ namespace PastebinhezHasonlo.Migrations
                         new
                         {
                             Id = 1,
-                            DiscardDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DiscardDate = new DateTime(2023, 9, 25, 12, 18, 5, 960, DateTimeKind.Local).AddTicks(393),
                             DiscardFirstRead = false,
                             MessageId = "1",
-                            Msg = "Példaüzenet."
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DiscardDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DiscardFirstRead = false,
-                            MessageId = "2",
-                            Msg = "Második üzenet."
+                            Msg = "Példaüzenet, hogy az adatbázis létrehozásakor már legyen benne valami."
                         });
                 });
 

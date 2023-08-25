@@ -12,8 +12,8 @@ using PastebinhezHasonlo.Data;
 namespace PastebinhezHasonlo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230821101447_IdentityHozzaadva")]
-    partial class IdentityHozzaadva
+    [Migration("20230825101806_AdatbazisLetrehozasa")]
+    partial class AdatbazisLetrehozasa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -169,12 +169,10 @@ namespace PastebinhezHasonlo.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -211,12 +209,10 @@ namespace PastebinhezHasonlo.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -234,13 +230,21 @@ namespace PastebinhezHasonlo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("DiscardDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DiscardFirstRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MessageId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Msg")
                         .IsRequired()
                         .HasMaxLength(8000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -251,14 +255,10 @@ namespace PastebinhezHasonlo.Migrations
                         new
                         {
                             Id = 1,
+                            DiscardDate = new DateTime(2023, 9, 25, 12, 18, 5, 960, DateTimeKind.Local).AddTicks(393),
+                            DiscardFirstRead = false,
                             MessageId = "1",
-                            Msg = "Példaüzenet."
-                        },
-                        new
-                        {
-                            Id = 2,
-                            MessageId = "2",
-                            Msg = "Második üzenet."
+                            Msg = "Példaüzenet, hogy az adatbázis létrehozásakor már legyen benne valami."
                         });
                 });
 
