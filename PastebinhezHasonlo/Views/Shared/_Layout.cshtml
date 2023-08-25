@@ -7,9 +7,9 @@
     <meta name="author" content="Szücs Zsolt">
 
     <title>@ViewData["Title"] - PastebinhezHasonlo</title>
-<!-- Eredeti bootstrap CSS lecserélve. bootswatch.com, theme: lumen (dark)-ra 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
--->
+    <!-- Eredeti bootstrap CSS lecserélve. bootswatch.com, theme: lumen (dark)-ra
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    -->
     <link rel="stylesheet" href="~/css/bootswatch.lumen.bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PastebinhezHasonlo.styles.css" asp-append-version="true" />
@@ -29,19 +29,28 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="ShowMyMessages">Aktív üzeneteim</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="CreateMessage">Üzenet írása</a>
-                            </li>
-                        </ul>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="ShowMyMessages">Aktív üzeneteim</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="CreateMessage">Üzenet írása</a>
+                        </li>
 
-                    </div>
+                        @if (User.IsInRole(Role.Admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="ShowUsers">Felhasználók</a>
+                            </li>
+                        }
+                    </ul>
+
+
+                </div> @* navbar *@
                 }
+
 
                 <partial name="_LoginPartial" />
             </div>
@@ -58,7 +67,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-8">
-                    &copy; 2023 
+                    &copy; 2023
                 </div>
                 <div class="col-4 text-end">
                     Elérhetőség:
