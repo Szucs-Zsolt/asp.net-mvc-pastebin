@@ -77,7 +77,7 @@ namespace PastebinhezHasonlo.Controllers
         }
 
         // Akkor se fut le, ha a request localhost:12345/Controller/Action-nek szól
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult CreateMessage()
         {
             CreateMessageVM createMessageVM = new CreateMessageVM();
@@ -97,7 +97,7 @@ namespace PastebinhezHasonlo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult CreateMessage(CreateMessageVM createMessageVM)
         {
             if (!ModelState.IsValid)
@@ -160,7 +160,7 @@ namespace PastebinhezHasonlo.Controllers
 
         // Ha sikeresen létrehoztunk egy üzenetet, kiírja az azonosítóját,
         // amivel majd le lehet kérdezni
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult ShowMessageId(string messageId)
         {
             ViewBag.MessageId = messageId;
@@ -168,7 +168,7 @@ namespace PastebinhezHasonlo.Controllers
         }
 
         // Bejelentkezett felhasználó megnézheti az általa létrehozott üzeneteket
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult ShowMyMessages() {
             // Saját üzenetei növekvő lejáratiidő sorrendben
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
@@ -191,7 +191,7 @@ namespace PastebinhezHasonlo.Controllers
             return View(messageList);
         }
 
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult ModifyMessage(string messageId)
         {
             // Hiba 1: Nincs üzenetazonosító
@@ -234,7 +234,7 @@ namespace PastebinhezHasonlo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult ModifyMessage(CreateMessageVM modifyMessageVM)
         {
             if (!ModelState.IsValid)
@@ -251,7 +251,7 @@ namespace PastebinhezHasonlo.Controllers
         }
 
 
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult DeleteMessage(string messageId)
         {
             // Hiba 1: Nincs üzenetazonosító
@@ -281,7 +281,7 @@ namespace PastebinhezHasonlo.Controllers
 
         [HttpPost, ActionName("DeleteMessage")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Role.User)]
+        [Authorize]
         public IActionResult DeleteMessagePOST(string messageId)
         {
             Message? message = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);                               

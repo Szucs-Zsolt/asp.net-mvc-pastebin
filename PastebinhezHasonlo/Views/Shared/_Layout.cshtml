@@ -27,9 +27,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                @if (User.IsInRole(Role.User))
+                @if (User.Identity.IsAuthenticated)
                 {
-
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
                         <ul class="navbar-nav flex-grow-1">
