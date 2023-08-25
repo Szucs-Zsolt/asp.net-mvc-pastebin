@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace PastebinhezHasonlo.Models
+namespace PastebinhezHasonlo.Models.ViewModels
 {
     // ViewModel a CreateMessage view számára
     public class CreateMessageVM

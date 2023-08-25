@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PastebinhezHasonlo.Data;
 using PastebinhezHasonlo.Models;
+using PastebinhezHasonlo.Models.ViewModels;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Xml.Linq;
@@ -274,9 +275,9 @@ namespace PastebinhezHasonlo.Controllers
                 return View("ShowErrorMessage");
             }
 
-            // Hiba 3: Az üzenetet nem az aktuális user hozta létre
+            // Hiba 3: Nem a sajátját akarja törölni és nem is admin csinálja
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
-            if (message.UserId != currentUserId)
+            if ((message.UserId != currentUserId) && (!User.IsInRole(Role.Admin)))
             {
                 ViewBag.ErrorMessage = "Nincs jogosultsága más üzenetét törölni.";
                 return View("ShowErrorMessage");
@@ -292,8 +293,9 @@ namespace PastebinhezHasonlo.Controllers
             Message? message = _db.Messages.FirstOrDefault(x => x.MessageId == messageId);                               
             if (message != null)
             {
+                // A saját üzenetét törli, vagy az admin az, aki törölni akar
                 string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
-                if (message.UserId == currentUserId)
+                if ( (message.UserId == currentUserId) || (User.IsInRole(Role.Admin)) )
                 {
                     _db.Messages.Remove(message);
                     _db.SaveChanges();
@@ -331,5 +333,27 @@ namespace PastebinhezHasonlo.Controllers
 
             return View(userRoleVMList);
         }
+
+        // Admin megnézheti bárkinek az üzeneteit
+        [Authorize(Roles=Role.Admin)]
+        public async Task<IActionResult> ShowUserMessages(string? email)
+        {
+            if (email == null) {
+                ViewBag.ErrorMessage = "Hiányzik a felhasználó email-címe.";
+                return View("ShowErrorMessage");
+            }
+
+            // User üzenetei növekvő lejárati idő sorrendben
+            var user = await _userManager.FindByEmailAsync(email);
+            IEnumerable<Message> messageList =
+                _db.Messages
+                    .Where(x => x.UserId == user.Id.ToString())
+                    .OrderBy(x => x.DiscardDate)
+                    .ToList();
+            
+            return View(messageList);
+        }
+
+
     } // class HomeController
 } // namespace
