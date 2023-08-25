@@ -178,23 +178,29 @@ namespace PastebinhezHasonlo.Controllers
         public IActionResult ShowMyMessages() {
             // Saját üzenetei növekvő lejáratiidő sorrendben
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
-            IEnumerable<Message> messageList =
-                _db.Messages
+            string currentUserName = User.FindFirstValue(ClaimTypes.Name);
+
+            ShowMessagesVM showMessageVM = new ShowMessagesVM()
+            {
+                MessageList = _db.Messages
                     .Where(x => x.UserId == currentUserId)
-                    .OrderBy(x=> x.DiscardDate)
-                    .ToList();
+                    .OrderBy(x => x.DiscardDate)
+                    .ToList(),
+                UserName = currentUserName,
+                IsAdminSupervision = false // saját üzeneteit nézi
+            };
 
             // Ha van benne olyan üzenet, amit már törölni kellett volna, de a háttérben
             // futó időnkénti törlés még nem jutott el hozzá, akkor itt töröljük.
             DateTime currentDateTime = DateTime.Now;
-            var discardMessages = messageList.Where(x => x.DiscardDate < currentDateTime);
+            var discardMessages = showMessageVM.MessageList.Where(x => x.DiscardDate < currentDateTime);
             if (discardMessages.Any())
             {
                 _db.Messages.RemoveRange(discardMessages);
                 _db.SaveChanges();
             }
             
-            return View(messageList);
+            return View("ShowUserMessages", showMessageVM );
         }
 
         [Authorize]
@@ -343,17 +349,24 @@ namespace PastebinhezHasonlo.Controllers
                 return View("ShowErrorMessage");
             }
 
-            // User üzenetei növekvő lejárati idő sorrendben
-            var user = await _userManager.FindByEmailAsync(email);
-            IEnumerable<Message> messageList =
-                _db.Messages
-                    .Where(x => x.UserId == user.Id.ToString())
-                    .OrderBy(x => x.DiscardDate)
-                    .ToList();
             
-            return View(messageList);
+            // Mi annak a usernek az azonosítója, akinek az üzeneteit nézzük
+            var originalUser = await _userManager.FindByEmailAsync(email);
+            // Mi az aktuális useré?
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
+            // Ha a kettő nem egyezik, akkor az admin nézi más leveleit.
+            var isAdminSupervision = originalUser.Id != currentUserId;
+
+            ShowMessagesVM showMessagesVM = new ShowMessagesVM()
+            {
+                MessageList = _db.Messages
+                    .Where(x => x.UserId == originalUser.Id.ToString())
+                    .OrderBy(x => x.DiscardDate)
+                    .ToList(),
+                UserName = originalUser.UserName,        // Kinek a leveleit nézzük
+                IsAdminSupervision = isAdminSupervision
+            };
+            return View(showMessagesVM);
         }
-
-
     } // class HomeController
 } // namespace

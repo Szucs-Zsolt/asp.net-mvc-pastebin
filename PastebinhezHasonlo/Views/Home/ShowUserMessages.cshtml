@@ -1,7 +1,14 @@
-﻿@model IEnumerable<Message>
+﻿@model ShowMessagesVM
 <div class="row">
-    <div class="mb-2">
-        <h3 class="col-12 text-center">Jelenleg aktív üzenetek</h3>
+    <div class="mb-2 mb-4">
+        @if (Model.IsAdminSupervision)
+        {
+            <div class="col-12 text-warning fs-4">Jelenleg adminként nézi más üzeneteit</div>
+        }
+        <div class="col-12 text-center fs-4">
+            <span class="text-info-emphasis">@Model.UserName</span>
+            <span class="fs-3"> aktív üzenetei</span>
+        </div>
     </div>
 
     <table class="table table-bordered table-striped col-12">
@@ -14,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var message in Model)
+            @foreach (var message in Model.MessageList)
             {
                 <tr>
                     <td>@message.MessageId</td>
@@ -41,7 +48,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-center text-info">@Model.Count() db üzenet</td>
+            <td class="text-center text-info">@Model.MessageList.Count() db üzenet</td>
         </tbody>
     </table>
 </div>

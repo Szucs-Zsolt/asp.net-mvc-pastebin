@@ -1,7 +1,10 @@
-﻿@model IEnumerable<Message>
+﻿@model ShowMessagesVM
 <div class="row">
-    <div class="mb-2">
-        <h3 class="col-12 text-center">Jelenleg aktív üzenetek</h3>
+    <div class="mb-2 mb-4">
+        <div class="col-12 text-center fs-4">
+            <span class="text-info-emphasis">@Model.UserName</span>
+            <span class="fs-3"> aktív üzenetei</span>
+        </div>
     </div>
 
     <table class="table table-bordered table-striped col-12">
@@ -12,11 +15,11 @@
                 <th class="col-3">Lejárati idő</th>
                 <th class="col-3 text-center">
                     <a asp-controller="Home" asp-action="CreateMessage" class="btn btn-success">Üzenet írása</a>
-                    </th>
+                </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var message in Model)
+            @foreach (var message in Model.MessageList)
             {
                 <tr>
                     <td>@message.MessageId</td>
@@ -25,13 +28,13 @@
                         message.Msg.Substring(0, 58) + ".." : message.Msg;
                     }
                     <td>@shortMessageText</td>
-                    
+
                     @{
                         string discardDateMsg = message.DiscardDate.ToString();
                         discardDateMsg += message.DiscardFirstRead ? "(csak egyszer)" : "";
                     }
                     <td>@discardDateMsg.ToString()</td>
-                    
+
                     <td class="col-3 text-center">
                         <a asp-controller="Home" asp-action="ModifyMessage" asp-route-messageId="@message.MessageId"
                            class="btn btn-sm btn-primary">Szerkesztés</a>
@@ -40,10 +43,10 @@
                     </td>
                 </tr>
             }
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="text-center text-info">@Model.Count() db üzenet</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-center text-info">@Model.MessageList.Count() db üzenet</td>
         </tbody>
     </table>
 </div>
