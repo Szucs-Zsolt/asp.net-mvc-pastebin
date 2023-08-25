@@ -26,7 +26,7 @@
                     <td>@userRole.Role</td>
                     <td>
                         <a asp-controller="Home" asp-action="ShowUserMessages" asp-route-email="@userRole.Email"
-                        class="btn btn-sm btn-primary">Üzenetei</a>
+                        class="btn btn-sm btn-primary">Üzenetei (@userRole.NumberOfActiveMessages)</a>
                     </td>
                     <td>
                         @if (userRole.Role == Role.Admin)

@@ -310,10 +310,16 @@ namespace PastebinhezHasonlo.Controllers
             foreach (var user in users)
             {
                 UserRoleVM userRoleVM = new UserRoleVM();
+                // Név, email
                 userRoleVM.Name = user.UserName;
                 userRoleVM.Email = user.Email;
+                
+                // Milyen role (csak az első számít, mivel mindenkinek csak 1 lehet)
                 var roles = await _userManager.GetRolesAsync(user);
                 userRoleVM.Role = roles.First();
+
+                // Hány aktív üzenete van az adatbázisban
+                userRoleVM.NumberOfActiveMessages = _db.Messages.Count(x => x.UserId == user.Id);
 
                 userRoleVMList.Add(userRoleVM);
             }
