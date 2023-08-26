@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using PastebinhezHasonlo.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using PastebinhezHasonlo.Data;                      // Role-ok neve ebben van

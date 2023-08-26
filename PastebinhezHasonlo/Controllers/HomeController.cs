@@ -221,9 +221,9 @@ namespace PastebinhezHasonlo.Controllers
                 return View("ShowErrorMessage");
             }
 
-            // Hiba 3: Az üzenetet nem az aktuális user hozta létre
+            // Hiba 3: Nem a sajátját akarja törölni és nem is admin csinálja
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToString();
-            if (message.UserId != currentUserId)
+            if ((message.UserId != currentUserId) && (!User.IsInRole(Role.Admin)))
             {
                 ViewBag.ErrorMessage = "Nincs jogosultsága más üzenetét szerkeszteni.";
                 return View("ShowErrorMessage");
