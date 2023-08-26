@@ -17,7 +17,16 @@
                 <th class="col-2">Azonosító</th>
                 <th class="col-4">Üzenet eleje</th>
                 <th class="col-3">Lejárati idő</th>
-                <th class="col-3"></th>
+                @if (Model.IsAdminSupervision)
+                {
+                    <th class="col-3"></th>
+                } else
+                {
+                    <th class="col-3">
+                        <a asp-controller="Home" asp-action="CreateMessage" class="btn btn-sm btn-success text-center w-100">Üzenet írása</a>
+                    </th>
+                }
+                
             </tr>
         </thead>
         <tbody>
@@ -51,6 +60,8 @@
             <td class="text-center text-info">@Model.MessageList.Count() db üzenet</td>
         </tbody>
     </table>
+
+    <a href="javascript:history.go(-1)" class="btn btn-sm btn-primary col-3">Vissza az előző oldalra</a>
 </div>
 
 
