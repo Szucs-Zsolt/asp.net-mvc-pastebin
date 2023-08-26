@@ -8,7 +8,6 @@ namespace PastebinhezHasonlo.Models
         [Key]
         public int Id { get; set; }
         
-        
         [Display(Name ="Üzenetazonosító")]
         public string? MessageId { get; set; }
 
