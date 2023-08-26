@@ -349,7 +349,6 @@ namespace PastebinhezHasonlo.Controllers
                 return View("ShowErrorMessage");
             }
 
-            
             // Mi annak a usernek az azonosítója, akinek az üzeneteit nézzük
             var originalUser = await _userManager.FindByEmailAsync(email);
             // Mi az aktuális useré?
@@ -368,5 +367,43 @@ namespace PastebinhezHasonlo.Controllers
             };
             return View(showMessagesVM);
         }
+
+        public async Task<IActionResult> ChangeAdminRoleStatus(string userEmail)
+        {
+            // Hiba: Nincs email
+            if (string.IsNullOrEmpty(userEmail)) {
+                ViewBag.ErrorMessage = "Nincs ilyen felhasználó";
+                return View("ShowErrorMessage");
+            }
+            if (userEmail == "admin@admin")
+            {
+                ViewBag.ErrorMessage = "admin@admin nevű adminisztrátortól nem lehet megvonni az admin jogot.";
+                return View("ShowErrorMessage");
+            }
+
+            // Hiba: Nincs user ilyen email-lel
+            var user = await _db.Users.FirstOrDefaultAsync(x=> x.Email == userEmail);
+            if (user == null) {
+                ViewBag.ErrorMessage = "Nincs ilyen felhasználó";
+                return View("ShowErrorMessage");
+            }
+
+            // Milyen role-jai vannak jelenleg
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Contains(Role.Admin)) // Admin -> User
+            {
+                // Egy felhasználónak csak egy role-ja lehet
+                await _userManager.RemoveFromRoleAsync(user, Role.Admin);
+                await _userManager.AddToRoleAsync(user, Role.User);
+            }
+            else // User -> Admin
+            {
+                await _userManager.RemoveFromRoleAsync(user, Role.User);
+                await _userManager.AddToRoleAsync(user, Role.Admin);
+            }
+
+            return RedirectToAction("ShowAllUsers");
+        }
+
     } // class HomeController
 } // namespace

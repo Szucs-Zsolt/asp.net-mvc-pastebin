@@ -31,11 +31,11 @@
                     <td>
                         @if (userRole.Role == Role.Admin)
                         {
-                            <a asp-controller="Home" asp-action="RemoveAdminRole" asp-route-email="@userRole.Email"
+                            <a asp-controller="Home" asp-action="ChangeAdminRoleStatus" asp-route-userEmail="@userRole.Email"
                             class="btn btn-sm btn-warning">Admin jog elvétele</a>
                         } else
                         {
-                            <a asp-controller="Home" asp-action="AddAdminRole" asp-route-email="@userRole.Email"
+                            <a asp-controller="Home" asp-action="ChangeAdminRoleStatus" asp-route-userEmail="@userRole.Email"
                                class="btn btn-sm btn-outline-warning">Admin jog megadása</a>
                         }
                     </td>
