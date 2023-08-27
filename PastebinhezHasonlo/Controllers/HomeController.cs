@@ -368,6 +368,7 @@ namespace PastebinhezHasonlo.Controllers
             return View(showMessagesVM);
         }
 
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> ChangeAdminRoleStatus(string userEmail)
         {
             // Hiba: Nincs email
@@ -402,6 +403,57 @@ namespace PastebinhezHasonlo.Controllers
                 await _userManager.AddToRoleAsync(user, Role.Admin);
             }
 
+            return RedirectToAction("ShowAllUsers");
+        }
+
+        //GET
+        [Authorize(Roles = Role.Admin)]
+        public async Task<IActionResult> DeleteUser(string userEmail)
+        {
+            // Hiba: Nincs email
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                ViewBag.ErrorMessage = "Nincs ilyen felhasználó";
+                return View("ShowErrorMessage");
+            }
+            // Hiba: az alap admin-t törölné
+            if (userEmail == "admin@admin")
+            {
+                ViewBag.ErrorMessage = "admin@admin -t nem lehet törölni.";
+                return View("ShowErrorMessage");
+            }
+            // Hiba: nincs ilyen felhasználó
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == userEmail);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = "Nincs ilyen felhasználó";
+                return View("ShowErrorMessage");
+            }
+
+            DeleteUserVM deleteUserVM = new DeleteUserVM()
+            {
+                UserName = user.UserName,
+                Email = user.Email
+            };
+            // Törlés
+            // await _userManager.DeleteAsync(user);
+            //return RedirectToAction("ShowAllUsers");
+            return View(deleteUserVM);
+        }
+
+        [HttpPost, ActionName("DeleteUser")]
+        [Authorize(Roles = Role.Admin)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUserPOST(string userEmail)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == userEmail);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = "Nincs ilyen felhasználó";
+                return View("ShowErrorMessage");
+            }
+            
+            await _userManager.DeleteAsync(user);
             return RedirectToAction("ShowAllUsers");
         }
 

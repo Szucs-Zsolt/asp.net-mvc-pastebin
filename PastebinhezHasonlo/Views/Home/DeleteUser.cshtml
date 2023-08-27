@@ -1,0 +1,19 @@
+﻿@model DeleteUserVM
+
+<h2>Biztos, hogy törli az alábbi felhasználót?</h2>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label"></label>
+        <input asp-for="UserName" disabled class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" disabled class="form-control" />
+    </div>
+
+    <div class="row mx-1 mt-4">
+        <a href="javascript:history.go(-1)" class="btn btn-primary col-4">Vissza az előző oldalra</a>
+        <div class="col-4"></div>
+        <input type="submit" value="Felhasználó törlése" class="btn btn-danger col-4" />
+    </div>
+</form>
