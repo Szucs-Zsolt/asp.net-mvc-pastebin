@@ -4,13 +4,8 @@ using System.Xml.Linq;
 
 namespace PastebinhezHasonlo.Models.ViewModels
 {
-    public class ChangePasswordVM
+    public class ChangeUserPasswordVM
     {
-        [Required(ErrorMessage = "{0} megadása szükséges.")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Jelenlegi jelszó")]
-        public string CurrentPassword { get; set; }
-
         [Required(ErrorMessage = "{0} megadása szükséges.")]
         [DataType(DataType.Password)]
         [Display(Name = "Új jelszó")]

@@ -462,6 +462,7 @@ namespace PastebinhezHasonlo.Controllers
 
 
         // Jelszó megváltoztatása
+        [Authorize]
         public IActionResult ChangePassword()
         {
             return View();
@@ -502,5 +503,56 @@ namespace PastebinhezHasonlo.Controllers
             }
             return View(changePasswordVM);
         }
+
+        // Jelszó megváltoztatása (admin által)
+        [Authorize(Roles = Role.Admin)]
+        public IActionResult ChangeUserPassword(string userEmail)
+        {
+            ChangeUserPasswordVM model = new ChangeUserPasswordVM() {
+                UserEmail = userEmail
+            };
+            return View(model);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = Role.Admin)]
+        public async Task<IActionResult> ChangeUserPassword(ChangeUserPasswordVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.UserEmail);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token,
+                    model.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        if (error.Description.Contains("Passwords must"))
+                        {
+                            ModelState.AddModelError("NewPassword",
+                                "A jelszó legalább 6 karakter hosszú legyen, tartalmazzon kis és nagybetűt, számot és speciális karaktert is.");
+                        }
+                        else
+                        {
+                            // Általános hibaleírás, nem egy adott property-hez tartozik
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return View(model);
+                    }
+                }
+
+                // ModelState.IsValid, és result is OK
+                return RedirectToAction("ShowAllUsers");
+            }
+
+            // ModelState nem volt valid
+            return View(model);
+        }
+
     } // class HomeController
 } // namespace
