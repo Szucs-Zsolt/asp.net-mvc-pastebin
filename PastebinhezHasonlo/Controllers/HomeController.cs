@@ -340,6 +340,9 @@ namespace PastebinhezHasonlo.Controllers
                 .ThenBy(x=> x.Name)
                 .ToList();
 
+            // egyedül admin@admin -nak van joga admin rola megadására és elvételére
+            Console.WriteLine($"\n\n*** {ClaimTypes.Email}\n\n");
+            ViewBag.CanChangeAdminRoleStatus = User.FindFirstValue(ClaimTypes.Email) == "admin@admin" ? "yes" : "no";
             return View(userRoleVMList);
         }
 

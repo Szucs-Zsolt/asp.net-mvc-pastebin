@@ -11,7 +11,10 @@
                 <th class="col-5">Név (email)</th>
                 <th class="col-3">Típus</th>
                 <th class="col-1">Üzenetei</th>
-                <th class="col-1">Admin jog</th>
+                @if (ViewBag.CanChangeAdminRoleStatus == "yes")
+                {
+                    <th class="col-1">Admin jog</th>
+                }
                 <th class="col-1">Törlés</th>
                 <th class="col-1">Jelszó</th>
             </tr>
@@ -27,18 +30,26 @@
                         <a asp-controller="Home" asp-action="ShowUserMessages" asp-route-email="@userRole.Email"
                            class="btn btn-sm btn-primary">Üzenetei (@userRole.NumberOfActiveMessages)</a>
                     </td>
-                    <td>
-                        @if (userRole.Role == Role.Admin)
-                        {
-                            <a asp-controller="Home" asp-action="ChangeAdminRoleStatus" asp-route-userEmail="@userRole.Email"
-                               class="btn btn-sm btn-warning">Admin jog elvétele</a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Home" asp-action="ChangeAdminRoleStatus" asp-route-userEmail="@userRole.Email"
-                               class="btn btn-sm btn-outline-warning">Admin jog megadása</a>
-                        }
-                    </td>
+                    
+                    
+                    
+                    @if (ViewBag.CanChangeAdminRoleStatus == "yes")
+                    {
+                        <td>
+
+                            @if (userRole.Role == Role.Admin)
+                            {
+                                <a asp-controller="Home" asp-action="ChangeAdminRoleStatus" asp-route-userEmail="@userRole.Email"
+                                class="btn btn-sm btn-warning">Admin jog elvétele</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Home" asp-action="ChangeAdminRoleStatus" asp-route-userEmail="@userRole.Email"
+                                class="btn btn-sm btn-outline-warning">Admin jog megadása</a>
+                            }
+                        </td>
+                    }
+                    
                     <td>
                         <a asp-controller="Home" asp-action="DeleteUser" asp-route-userEmail="@userRole.Email"
                            class="btn btn-sm btn-danger">Felhasználó törlése</a>
