@@ -18,15 +18,18 @@ namespace PastebinhezHasonlo.Controllers
         // Dependency injection: EntityFramework
         private readonly ApplicationDbContext _db;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public HomeController(
             ILogger<HomeController> logger,
             ApplicationDbContext db,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
             _db = db;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET
@@ -457,5 +460,47 @@ namespace PastebinhezHasonlo.Controllers
             return RedirectToAction("ShowAllUsers");
         }
 
+
+        // Jelszó megváltoztatása
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                // Jelszó megváltoztatása
+                var result = await _userManager.ChangePasswordAsync(user,
+                    changePasswordVM.CurrentPassword, changePasswordVM.NewPassword);
+                if (!result.Succeeded) { 
+                    foreach (var error in result.Errors)
+                    {
+                        if (error.Description == "Incorrect password.")
+                        {
+                            ModelState.AddModelError("CurrentPassword", "Hibás jelszó");
+                        } else if (error.Description.Contains("Passwords must")) {
+                            ModelState.AddModelError("NewPassword",
+                                "A jelszó legalább 6 karakter hosszú legyen, tartalmazzon kis és nagybetűt, számot és speciális karaktert is.");
+                        }
+                        else
+                        {
+                            // Általános hibaleírás, nem egy adott property-hez tartozik
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                    return View(changePasswordVM);
+                }
+
+                // Siker esetén sign-in cookie refresh
+                await _signInManager.RefreshSignInAsync(user);
+                return RedirectToAction("Index");
+            }
+            return View(changePasswordVM);
+        }
     } // class HomeController
 } // namespace
