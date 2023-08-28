@@ -23,7 +23,8 @@ namespace PastebinhezHasonlo.Models.ViewModels
             "A két jelszó nem egyezik meg.")]
         public string ConfirmPassword { get; set; }
 
-        [ValidateNever]
+        /*[ValidateNever]
         public string UserEmail { get; set; }
+        */
     }
 }
