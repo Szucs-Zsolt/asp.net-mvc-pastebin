@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
+# nullable disable
 namespace PastebinhezHasonlo.Models
 {
     public class Message
     {
         [Key]
-        public int Id { get; set; }
-        
         [Display(Name ="Üzenetazonosító")]
-        public string? MessageId { get; set; }
+        public string MessageId { get; set; }
 
         [Required(ErrorMessage = "{0} megadása szükséges.")]
         [MaxLength(8000, ErrorMessage = "{0} max. {1} karakter hosszú lehet.")]
@@ -17,7 +16,7 @@ namespace PastebinhezHasonlo.Models
         public string Msg { get; set; }
 
         [ValidateNever]            // Controllerben írjuk bele, nem formból jövő adat
-        public string? UserId { get; set; }         // Ki írta az üzenetet
+        public string UserId { get; set; }         // Ki írta az üzenetet
 
         [ValidateNever]
         [Display(Name ="Első elolvasás után töröljük")]

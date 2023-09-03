@@ -111,6 +111,16 @@ namespace PastebinhezHasonlo.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // ViewModel-ben a lehetséges lejárati időket nem kaptuk vissza, ezért újra feltöltjük
+                createMessageVM.DiscardTimeList = new List<SelectListItem>();
+                foreach (var (key, value) in new DiscardTime().Names)
+                {
+                    createMessageVM.DiscardTimeList.Add(new SelectListItem
+                    {
+                        Value = key.ToString(),
+                        Text = value
+                    });
+                }
                 return View(createMessageVM);
             }
 

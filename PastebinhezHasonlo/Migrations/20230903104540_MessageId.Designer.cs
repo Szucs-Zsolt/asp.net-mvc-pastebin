@@ -12,8 +12,8 @@ using PastebinhezHasonlo.Data;
 namespace PastebinhezHasonlo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230825101806_AdatbazisLetrehozasa")]
-    partial class AdatbazisLetrehozasa
+    [Migration("20230903104540_MessageId")]
+    partial class MessageId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -224,20 +224,14 @@ namespace PastebinhezHasonlo.Migrations
 
             modelBuilder.Entity("PastebinhezHasonlo.Models.Message", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DiscardDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("DiscardFirstRead")
                         .HasColumnType("bit");
-
-                    b.Property<string>("MessageId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Msg")
                         .IsRequired()
@@ -247,17 +241,16 @@ namespace PastebinhezHasonlo.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("MessageId");
 
                     b.ToTable("Messages");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            DiscardDate = new DateTime(2023, 9, 25, 12, 18, 5, 960, DateTimeKind.Local).AddTicks(393),
-                            DiscardFirstRead = false,
                             MessageId = "1",
+                            DiscardDate = new DateTime(2023, 10, 3, 12, 45, 39, 783, DateTimeKind.Local).AddTicks(4468),
+                            DiscardFirstRead = false,
                             Msg = "Példaüzenet, hogy az adatbázis létrehozásakor már legyen benne valami."
                         });
                 });

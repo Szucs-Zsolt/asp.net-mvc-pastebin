@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PastebinhezHasonlo.Migrations
 {
-    public partial class AdatbazisLetrehozasa : Migration
+    public partial class MessageId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,9 +52,7 @@ namespace PastebinhezHasonlo.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MessageId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MessageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Msg = table.Column<string>(type: "nvarchar(max)", maxLength: 8000, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DiscardFirstRead = table.Column<bool>(type: "bit", nullable: false),
@@ -62,7 +60,7 @@ namespace PastebinhezHasonlo.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.PrimaryKey("PK_Messages", x => x.MessageId);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,8 +171,8 @@ namespace PastebinhezHasonlo.Migrations
 
             migrationBuilder.InsertData(
                 table: "Messages",
-                columns: new[] { "Id", "DiscardDate", "DiscardFirstRead", "MessageId", "Msg", "UserId" },
-                values: new object[] { 1, new DateTime(2023, 9, 25, 12, 18, 5, 960, DateTimeKind.Local).AddTicks(393), false, "1", "Példaüzenet, hogy az adatbázis létrehozásakor már legyen benne valami.", null });
+                columns: new[] { "MessageId", "DiscardDate", "DiscardFirstRead", "Msg", "UserId" },
+                values: new object[] { "1", new DateTime(2023, 10, 3, 12, 45, 39, 783, DateTimeKind.Local).AddTicks(4468), false, "Példaüzenet, hogy az adatbázis létrehozásakor már legyen benne valami.", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
